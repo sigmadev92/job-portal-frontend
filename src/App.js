@@ -1,58 +1,35 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Navbar from "./component/Navbar/Navbar";
-import Footer from "./component/Footer/Footer";
+import NotFound from "./pages/NotFound";
 import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import Jobs from "./pages/Jobs/Jobs";
+import Login from "./pages/Login/Login";
 import About from "./pages/About/About";
-import "react-image-crop/dist/ReactCrop.css";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { fetchUser } from "./redux/slice/userSlice";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Profile from "./pages/Profile/Profile";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Jobs from "./pages/Jobs/Jobs";
 import JobDetail from "./pages/JobDetail/JobDetail";
-import { fetchJobActionRecords } from "./redux/slice/jobActionSlice";
-
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchUser());
-    dispatch(fetchJobActionRecords());
-  }, [dispatch]);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Navbar />,
+      errorElement: <NotFound />,
+      children: [
+        { index: true, element: <Home /> },
+        { path: "register", element: <Register /> },
+        { path: "login", element: <Login /> },
+        { path: "dashboard", element: <Dashboard /> },
+        { path: "about", element: <About /> },
+        { path: "jobs", element: <Jobs /> },
+        { path: "job/details/:jobId", element: <JobDetail /> },
+        { path: "forgot-password", element: <ForgotPassword /> },
+      ],
+    },
+  ]);
   return (
     <>
-      <BrowserRouter>
-        <ToastContainer
-          position="top-center"
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable={false}
-          theme="colored"
-        />
-        <Navbar />
-
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile/:user_id" element={<Profile />} />
-          <Route path="/jobs/:jobid" element={<JobDetail />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </>
   );
 }

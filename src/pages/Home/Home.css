@@ -1,8 +1,0 @@
-/* body{
-    background-image: url("../component/images/office.jpeg");
-
-} */
-
-.make-blur {
-  backdrop-filter: blur(20px);
-}
